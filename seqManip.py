@@ -19,7 +19,7 @@ print RNAseq
 Complement= sequence.replace("a","A").replace("A","T").replace("t","a").replace("g","G").replace("G","C").replace("c","g")
 ReverseComplement=Complement[::-1] 
 #now I print everything to the screen in lower case 
-print "This is my reverse complement",Reversecomplement.lower()
+print "This is my reverse complement",ReverseComplement.lower()
 
 # Extract the bases corresponding to the 13rd and 14th codons from the
 #sequence, then print them to the screen. I used the index numbers for the codons and made a variable equal tot hat index
