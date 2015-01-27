@@ -117,7 +117,7 @@ def sites(eventslist,probability,size):
          #these variables are keeping count      
         count1.append(p)
         count2.append(l)
-    return p,l
+    return "This is value of p",p,"this is the value of l",l
             
     
 eventslist=[("j"),("a")]
