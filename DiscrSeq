@@ -103,7 +103,7 @@ The second type supports the monophyly of taxon A and taxon C.
 
 #UH SOMETHING IS GOING WRONG AND I KEEP GETTING ZERO or 400 not increments of 200 
 #first I need to create variables for two different site types 
-def thisthing(eventslist,probability,size):
+def sites(eventslist,probability,size):
     count1=[]
     count2 =[]
     p=0
@@ -111,10 +111,12 @@ def thisthing(eventslist,probability,size):
     
     for events in range(size):
     #I have 200 of each type of site. Now I need to use my function from part 5 for sampling
-        if DiscreteDistr(eventlist,problist,size)[1] ==0:
+        if DiscreteDistr(eventlist,problist,size) ==0:
+        # this uses the def from above to determine which variable gets a "count"
             p=p +1
         else:
             l=l +1
+        #these statements are helping the loop count how many times each letter is picked
                 
         count1.append(p)
         count2.append(l)
@@ -125,17 +127,25 @@ eventslist=[("j"*200),("b"*200)]
 probability=[.5,.5]
 size=400
 
-a=thisthing(eventslist,probability,size)
-b=thisthing(eventslist,probability,size)
+a=sites(eventslist,probability,size)
+b=sites(eventslist,probability,size)
 
 print a
 print b
 
 #7
 a=[]
+#now lets do 100 trials (in theory this would work if I can fix the first part-#6)
 x = 0
+#this will be used as a blank starting counter
 while x < 100:
-    times = thisthing(eventslist, probability, 400)
+#anything under 100 once it reaches 100 loops it stops
+    times = sites(eventslist, probability, 400)
+    #calls previous function 
     a.append(times)
     x = x+1
 print a 
+
+#8. ...#summarize how oftern I saw each proportion...Will summarize once #6 is fixed :/ but as of now everything that is being drawn is type2
+
+#9 -11. Will go back and summarize and run a larger sample once 6 is fixed to consider both variables in the list 
