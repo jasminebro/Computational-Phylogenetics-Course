@@ -101,8 +101,6 @@ The second type supports the monophyly of taxon A and taxon C.
 #sample a new alignment (a new set of site pattern counts) with replacement 
 #from the original using your function from (5). Print out the counts of the two types.
 
-#UH SOMETHING IS GOING WRONG AND I KEEP GETTING ZERO or 400 not increments of 200 
-#first I need to create variables for two different site types 
 def sites(eventslist,probability,size):
     count1=[]
     count2 =[]
@@ -111,19 +109,18 @@ def sites(eventslist,probability,size):
     
     for events in range(size):
     #I have 200 of each type of site. Now I need to use my function from part 5 for sampling
-        if DiscreteDistr(eventlist,problist,size) ==0:
-        # this uses the def from above to determine which variable gets a "count"
+        if DiscreteDistr(eventlist,problist,size)[1] =="a":
+            #the index 1 refers to the print statement from the DiscrDistr function.[1] is the value from x
             p=p +1
         else:
             l=l +1
-        #these statements are helping the loop count how many times each letter is picked
-                
+         #these variables are keeping count      
         count1.append(p)
         count2.append(l)
-    return p, l
+    return p,l
             
     
-eventslist=[("j"*200),("b"*200)]
+eventslist=[("j"),("a")]
 probability=[.5,.5]
 size=400
 
@@ -135,16 +132,13 @@ print b
 
 #7
 a=[]
-#now lets do 100 trials (in theory this would work if I can fix the first part-#6)
 x = 0
-#this will be used as a blank starting counter
 while x < 100:
-#anything under 100 once it reaches 100 loops it stops
     times = sites(eventslist, probability, 400)
-    #calls previous function 
     a.append(times)
     x = x+1
 print a 
+
 
 #8. ...#summarize how oftern I saw each proportion...Will summarize once #6 is fixed :/ but as of now everything that is being drawn is type2
 
