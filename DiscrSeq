@@ -87,3 +87,55 @@ eventlist=["j","a","s","m","i","n","e"]
 problist=[.4,.5,.6,.7,.3,.2,.1]
 
 print DiscreteDistr(eventlist,problist)
+
+
+"""
+This next section focuses on "sampling sites from an alignment"
+Imagine that you have a multiple sequence alignment with two kinds of sites.
+One type of site pattern supports the monophyly of taxon A and taxon B.
+The second type supports the monophyly of taxon A and taxon C.
+
+"""
+#6 For an alignment of 400 sites,
+#with 200 sites of type 1 and 200 of type 2, 
+#sample a new alignment (a new set of site pattern counts) with replacement 
+#from the original using your function from (5). Print out the counts of the two types.
+
+#UH SOMETHING IS GOING WRONG AND I KEEP GETTING ZERO or 400 not increments of 200 
+#first I need to create variables for two different site types 
+def thisthing(eventslist,probability,size):
+    count1=[]
+    count2 =[]
+    p=0
+    l=0
+    
+    for events in range(size):
+    #I have 200 of each type of site. Now I need to use my function from part 5 for sampling
+        if DiscreteDistr(eventlist,problist,size)[1] ==0:
+            p=p +1
+        else:
+            l=l +1
+                
+        count1.append(p)
+        count2.append(l)
+    return p, l
+            
+    
+eventslist=[("j"*200),("b"*200)]
+probability=[.5,.5]
+size=400
+
+a=thisthing(eventslist,probability,size)
+b=thisthing(eventslist,probability,size)
+
+print a
+print b
+
+#7
+a=[]
+x = 0
+while x < 100:
+    times = thisthing(eventslist, probability, 400)
+    a.append(times)
+    x = x+1
+print a 
