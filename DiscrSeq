@@ -1,0 +1,89 @@
+"""
+Created on Sun Jan 25 22:18:46 2015
+
+@author: Jasmine Brown
+"""
+#Assignment Two 
+
+#1. Write a function that multiplies all consecutively decreasing numbers
+#max and min are supplied as arguments
+
+from functools import reduce 
+#reduce allows me to apply a function of two arguments and the values are reduced to a single value
+import operator
+#lets me use standard operations as function ex.operator.add(x,y)=x+y
+
+def multiple (min,max):
+#I am creating a function to interate over a range of values and return one value
+    x= reduce(operator.mul, range(min,max+1))
+    #I am using reduce to give me one value in this range. operator.mul will multiply
+    #the values in the range. +1 is added to max to make sure the max number is included
+    return x
+         
+example=multiple(2,10)
+#here is an example of how to input values and call my "multiple" function
+
+print example     
+
+#2. write a function that calculates the binomial coefficient 2 ways using the function from #1   
+#2a. use the n!/(n-k)!k! OR n(n-1)...(n-k+1)/k!
+
+def BiCoefficient(n,k): 
+    if k>n:
+        return 0
+    else:
+    #note that n should be your max value and k the min. you want to see how many sets are in the larger
+        return multiple(n, 1)/(multiple(n-k, 1)*multiple(k, 1))
+
+example2a=BiCoefficient(10,2)
+print example2a
+
+#2b Now lets use the other equation to calulate the binomial coefficient 
+#n*n-1/k
+
+#Note: I think I may have something wrong with the equation above...the value is 4 off from the 2nd equation
+#I also tried this equation (n*n-1)/k and it's 4 off not sure why 
+def BiCoefficient2(n,k):
+    if k>n:
+        return 0
+    else: 
+        return multiple(n, n-k+1)/multiple(k,1)
+    
+example2b=BiCoefficient2 (10,2)
+print example2b
+
+#3. Now I'm going to use both functions on large values and see what happens
+#I tried both of these and the first equation took longer than the 2nd
+
+#4. Use (2b) to write a function that calculates the probability of 
+#k successes in n Bernoulli trials with probability p. 
+#This is called the Binomial(n,p) distribution. 
+def Bernoulli(k,n,p): 
+    ProbMassFunction= BiCoefficient2(n, k)*pow(p,k)*pow((1-p),(n-k))
+    
+    return ProbMassFunction 
+    
+#5 Now write a function to sample from an arbitrary discrete distribution. 
+#This function should take two arguments. 
+#The first is a list of arbitrarily labeled events and the second is a list of 
+#probabilities associated with these events.
+
+
+def DiscreteDistr(events,probabilities):
+    #you need to import random to get arbritrary random numbers generated
+    import random
+    x= random.choice(events)
+    #this pulls a random number from a list 
+    #the lists must be the same length and I should use the lists index to match
+    #events with its proper probability 
+    index=events.index(x)
+    #this indexes the random events 
+    probability=probabilities[index]
+    #this is the probabilities of the events given 
+    
+    return "this is the event", x, "and this is the probability", probability
+    
+eventlist=["j","a","s","m","i","n","e"]
+problist=[.4,.5,.6,.7,.3,.2,.1]
+
+print DiscreteDistr(eventlist,problist)
