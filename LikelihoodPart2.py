@@ -103,21 +103,22 @@ def HillClimber (n,k,pCurr, difference):
     PMFUp=PMF(n,k,pUp)
     PMFDown=PMF(n,k,pDown)
     
-    while PMFCurr < PMFDown or PMFCurr < PMFUp:    
+    while PMFCurr < PMFDown or PMFCurr < PMFUp:  #Try to make while difference > ).001  
        
-        if  PMFCurr > PMFUp:
-            PMFCurr= PMFUp
-            print PMFCurr
+        if  PMFCurr < PMFUp: #checking is a value above or below is better 
+        #make it so you can update the p value
+            pCurr=pUp #changed so it calculates the up value I had a random PMF function here
             PMFCurr=PMF(n,k,pCurr)
             pUp=pCurr+difference 
             PMFUp=PMF(n,k,pUp)
             
-        elif PMFCurr < PMFDown:
+        elif PMFCurr > PMFDown:
             pCurr=pDown
             PMFCurr= PMF(n,k,pCurr)
             pDown=pCurr-difference
             PMFDown=PMF(n,k,pDown)
-            print "blah+blah"
+        else:
+            difference *=0.5 #this will split the pCurr value in half which reduces the values and lets me look at small values around p
     return pCurr
         
 print HillClimber(5,4,.74,.2)      
