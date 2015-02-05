@@ -103,16 +103,16 @@ def HillClimber (n,k,pCurr, difference):
     PMFUp=PMF(n,k,pUp)
     PMFDown=PMF(n,k,pDown)
     
-    while PMFCurr < PMFDown or PMFCurr < PMFUp:  #Try to make while difference > ).001  
+    while difference > 0.001:  #Try to make while difference > ).001  
        
-        if  PMFCurr < PMFUp: #checking is a value above or below is better 
+        if  PMFUp> PMFCurr: #checking is a value above or below is better 
         #make it so you can update the p value
             pCurr=pUp #changed so it calculates the up value I had a random PMF function here
             PMFCurr=PMF(n,k,pCurr)
             pUp=pCurr+difference 
             PMFUp=PMF(n,k,pUp)
             
-        elif PMFCurr > PMFDown:
+        elif PMFDown > PMFCurr:
             pCurr=pDown
             PMFCurr= PMF(n,k,pCurr)
             pDown=pCurr-difference
@@ -121,7 +121,7 @@ def HillClimber (n,k,pCurr, difference):
             difference *=0.5 #this will split the pCurr value in half which reduces the values and lets me look at small values around p
     return pCurr
         
-print HillClimber(5,4,.74,.2)      
+print HillClimber(5,4,.74,.1)      
         
 """
 In the exercise above, you tried to find an intuitive cutoff for likelihood ratio
@@ -175,7 +175,7 @@ Ratios.sort() #this sorts my list in numerical order
 # Now, convert the likelihood ratios (LRs) to -2ln(LRs) values.
 #OMG Now I'm getting all negative zeros here....something must be wrong with a preceeding equation 
 import math
-
+#this should be equivalent to the chi squared data 
 LogRatios=[]
 for j in range(0,200) :
     LikeliLog=-2*(math.log(Ratios[j]))
