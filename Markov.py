@@ -101,7 +101,7 @@ def Markov(states,MatrixData,steps):
         #for some variable in a range of steps that will be given      
         if Currently ==states[0]: #if it equals A
             Currently= DiscreteDistr(states,MatrixData[0])[1] #I need the 1 index to get the x value from my discrete function above
-        if Currently ==states[1]: #if it equals B
+        elif Currently ==states[1]: #if it equals B
             Currently =DiscreteDistr(states,MatrixData[1])[1]
         list.append(Currently)
     return list 
