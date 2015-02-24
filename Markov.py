@@ -109,12 +109,52 @@ def Markov(states,MatrixData,steps):
 	
 print Markov(Chain,Matrix,10)
 	
-	
-
 # ----> Try to finish the above lines before Tues, Feb. 10th <----
 # Now try running 100 simulations of 100 steps each. How often does the chain
 # end in each state? How does this change as you change the transition matrix?
+
+print Markov(Chain,Matrix,100)
+
 # Try defining a state space for nucleotides: A, C, G, and T. Now define a
 # transition matrix with equal probabilities of change between states.
+
+
+nucleotides =("a","t","g","c") #this is going  to be my state space 
+
+NucMatrix=[[0.25,0.25,0.25,0.25],[0.25,0.25,0.25,0.25],[0.25,0.25,0.25,0.25],[0.25,0.25,0.25,0.25]]
+
+statelist=[]
+for i in range (100):
+    a=Markov(nucleotides,NucMatrix,100)
+    state=a[99]
+    statelist.append(state)
+print statelist
+    
+A=statelist.count("a")    
+T=statelist.count("t")
+G=statelist.count("g")
+C=statelist.count("c")
+
+print(A,T,G,C)
+
 # Again, run 100 simulations of 100 steps and look at the ending states. Then
 # try changing the transition matrix.
+
+nucleotides2 =("a","t","g","c") #this is going  to be my state space 
+#I'll just use random state numbers and see what happrens 
+NucMatrix2=[[0.20,0.40,0.30,0.10],[0.40,0.30,0.20,0.10],[0.25,0.25,0.25,0.25],[0.50,0.20,0.10,0.20]]
+
+statelist2=[]
+for i in range (100):
+    a=Markov(nucleotides2,NucMatrix2,100)
+    state=a[len(a)-1] #tried this to see if it would make a difference as far as the letters I got
+    statelist2.append(state)
+print statelist2
+    
+A2=statelist2.count("a")    
+T2=statelist2.count("t")
+G2=statelist2.count("g")
+C2=statelist2.count("c")
+
+print(A2,T2,G2,C2)
+  
