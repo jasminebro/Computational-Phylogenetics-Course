@@ -126,7 +126,7 @@ NucMatrix=[[0.25,0.25,0.25,0.25],[0.25,0.25,0.25,0.25],[0.25,0.25,0.25,0.25],[0.
 statelist=[]
 for i in range (100):
     a=Markov(nucleotides,NucMatrix,100)
-    state=a[99]
+    state=a[len(a)-1]
     statelist.append(state)
 print statelist
     
@@ -147,7 +147,7 @@ NucMatrix2=[[0.20,0.40,0.30,0.10],[0.40,0.30,0.20,0.10],[0.25,0.25,0.25,0.25],[0
 statelist2=[]
 for i in range (100):
     a=Markov(nucleotides2,NucMatrix2,100)
-    state=a[len(a)-1] #tried this to see if it would make a difference as far as the letters I got
+    state=a[len(a)-1] #tried this to see if it would make a difference as far as the letters I got and to make it more general
     statelist2.append(state)
 print statelist2
     
