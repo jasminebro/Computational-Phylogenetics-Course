@@ -32,20 +32,23 @@ def Markov(states,MatrixData,steps):
     """Now I am going to create a function for a Markov Chain. states can use a list for the space. MatrixData
     can be used to represent a list of tuples that represent the transitions, steps is how many times this will run""" 
     import random
-    list=[]
-    #I am making a list that will hold my current states as they transition     
-    Currently=random.choice(states)
-    #choice chooses between whatever is in that space, my choices are A and B from the Chain list above
-  
-    for i in range (steps):
-        #for some variable in a range of steps that will be given      
-        if Currently ==states[0]: #if it equals A
-            Currently= DiscreteDistr(states,MatrixData[0])[1] #I need the 1 index to get the x value from my discrete function above
-        elif Currently ==states[1]: #if it equals B
-            Currently =DiscreteDistr(states,MatrixData[1])[1]
-        list.append(Currently)
-    return list 
-
+    if steps < 0: #dummy check for invalid value for steps
+        return 'Invalid number of steps. Must be positive integer.'
+        
+    initialState = random.choice(states) #draws the first state with equal probability
+    markov_chain = [] #creates the list to store the Markov chain as it transitions
+    markov_chain.append(initialState) #appends the first state to the Markov chain
+    n = 0 #sets the starting index of the Markov list
+    while n <= steps-1: #sets the number of "steps" to run the chain
+        if markov_chain[n] == states[0]: #checks if the current element is state[0]
+            nextState = DiscreteDistr(states, MatrixData[0])[1] #if it's true, draws the next state based on the transition probabilities of state[0]
+            markov_chain.append(nextState) #appends it to the Markov chain
+        else:
+            nextState = DiscreteDistr(states, MatrixData[1])[1]
+            markov_chain.append(nextState)
+        n += 1 #increases the value of n to look at the next index
+    return markov_chain
+    
 
 # Define a 2x2 transition matrix. For fun, don't make all the probabilities
 # equal. Also, don't use any 0s or 1s (to make sure the chain is irreducible
