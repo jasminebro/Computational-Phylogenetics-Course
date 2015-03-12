@@ -206,10 +206,15 @@ class ContinMarkov(object):
             (3, 'c')
             
             """
-            from itertools import *
+         try:
+                from itertools import izip as zip
+            except ImportError: # will be 3.x series
+                pass
+                    
             for i in izip(states):
                 self.Chains=i
             return self.Chains
+            
             
             """Now I need to create something that goes through each row counts the number of values
             (which would depend on the number of simulations) and associates their self.statespace value 
