@@ -16,7 +16,7 @@ G
 T
 """
 class ContinMarkov(object):
-    def __init__(self,v=0.6,statespace=None,freqlist=None,R=None,QMatrix=None,NumSimulations=None,NormQMatrix=None):
+    def __init__(self,v=0.6,statespace=None,freqlist=None,R=None,QMatrix=None,NumSimulations=None):
     
           if freqlist==None:
              freqlist=[]
@@ -29,8 +29,8 @@ class ContinMarkov(object):
            # R=[rAC,rAG,rAT,rCG,rCT,rGT]
           if QMatrix==None:
             self.QMatrix=[]
-          if NormQMatrix==None:
-              self.NormQMatrix=[]
+          #if NormQMatrix==None:
+              #self.NormQMatrix=[]
           if NumSimulations==None:
             self.NumSimulations=input("Please enter the number of simulations:")         
                     
@@ -44,7 +44,7 @@ class ContinMarkov(object):
           self.R=R
          #making the values a list so I can index them
           self.QMatrix=QMatrix
-          self.NormQMatrix=NormQMatrix
+          self.NormQMatrix=self.normalize()
           
           
        
@@ -68,7 +68,7 @@ class ContinMarkov(object):
                 return statespace[i]
         return None     
           
-    def normalize(self,R=[0.45,0.67,0.76,0.39,0.59,0.43],freqlist=[0.27,0.34,0.20,.19],NormQMatrix=None):
+    def normalize(self,R=[0.45,0.67,0.76,0.39,0.59,0.43],freqlist=[0.27,0.34,0.20,.19]):
                 
         """I am creating a function to normalize my matrix before simulating transtions""" 
         import numpy as np 
@@ -95,11 +95,11 @@ class ContinMarkov(object):
         return NormQMatrix
         
 
-    def simulate(self):
+    def simulate(self,NormQMatrix):
         import scipy
         import random
         #create a list of the marginal probabilties associated with each nucleotide
-        self.MargProbs=[NormQMatrix[0][1]/-NormQMatrix[0][0],NormQMatrix[0][2]/-NormQMatrix[0][0],NormQMatrix[0][3]/-NormQMatrix[0][0],
+        MargProbs=[NormQMatrix[0][1]/-NormQMatrix[0][0],NormQMatrix[0][2]/-NormQMatrix[0][0],NormQMatrix[0][3]/-NormQMatrix[0][0],
                    NormQMatrix[1][0]/-NormQMatrix[1][1],NormQMatrix[1][2]/-NormQMatrix[1][1],NormQMatrix[1][3]/-NormQMatrix[1][1],
                    NormQMatrix[2][0]/-NormQMatrix[2][2],NormQMatrix[2][1]/-NormQMatrix[2][2],NormQMatrix[2][3]/-NormQMatrix[2][2],
                    NormQMatrix[3][0]/-NormQMatrix[3][3],NormQMatrix[3][1]/-NormQMatrix[3][3],NormQMatrix[3][2]/-NormQMatrix[3][3]]
@@ -180,4 +180,6 @@ class ContinMarkov(object):
             return states
             return waitTimes 
    
-  
+
+
+
