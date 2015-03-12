@@ -56,10 +56,10 @@ class ContinMarkov(object):
         else:
             print "Your frequencies DO NOT EQUAL 1...better start over!"
         #this is my lists of lists that contains my q matrix values
-        self.QMatrix=[[-1*(R[0]*self.freqlist[1]+R[1]*self.freqlist[2]+R[2]*self.freqlist[3]),R[0]*self.freqlist[1],R[1]*self.freqlist[2],R[2]*self.freqlist[3]],
-                      [R[0]*self.freqlist[0],-1*(R[0]*self.freqlist[0]+R[3]*self.freqlist[2]+R[4]*self.freqlist[3]),R[3]*self.freqlist[2],R[4]*self.freqlist[3]],
-                      [R[1]*self.freqlist[0],R[3]*self.freqlist[1],-1*(R[1]*self.freqlist[0]+R[3]*self.freqlist[1]+R[5]*self.freqlist[3]),R[5]*self.freqlist[3]],
-                      [R[2]*self.freqlist[0],R[4]*self.freqlist[1],R[5]*self.freqlist[2],-1*(R[2]*self.freqlist[0]+R[4]*self.freqlist[1]+R[5]*self.freqlist[2])]] 
+        self.QMatrix=[[-1*(self.R[0]*self.freqlist[1]+self.R[1]*self.freqlist[2]+self.R[2]*self.freqlist[3]),self.R[0]*self.freqlist[1],self.R[1]*self.freqlist[2],self.R[2]*self.freqlist[3]],
+                     [self.R[0]*self.freqlist[0],-1*(self.R[0]*self.freqlist[0]+self.R[3]*self.freqlist[2]+self.R[4]*self.freqlist[3]),self.R[3]*self.freqlist[2],self.R[4]*self.freqlist[3]],
+                     [self.R[1]*self.freqlist[0],self.R[3]*self.freqlist[1],-1*(self.R[1]*self.freqlist[0]+self.R[3]*self.freqlist[1]+self.R[5]*self.freqlist[3]),self.R[5]*self.freqlist[3]],
+                     [self.R[2]*self.freqlist[0],self.R[4]*self.freqlist[1],self.R[5]*self.freqlist[2],-1*(self.R[2]*self.freqlist[0]+self.R[4]*self.freqlist[1]+self.R[5]*self.freqlist[2])]]
                          
         for l in self.QMatrix:
             #map(a function,a sequence)---applies your function over the entire sequence 
