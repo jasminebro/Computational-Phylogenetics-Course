@@ -195,3 +195,22 @@ class ContinMarkov(object):
             ProbM=scipy.linalg.expm(NormQMatrix*self.v)
             
             return ProbM
+         def IndivStates(self,Chains):
+            """from itertools import *
+
+            for i in izip([1, 2, 3], ['a', 'b', 'c']):
+                print i
+            
+            (1, 'a')
+            (2, 'b')
+            (3, 'c')
+            
+            """
+            from itertools import *
+            for i in izip(states):
+                self.Chains=i
+            return self.Chains
+            
+            """Now I need to create something that goes through each row counts the number of values
+            (which would depend on the number of simulations) and associates their self.statespace value 
+            as it moves to the next index in the row with it's respective self.statespace value"""
