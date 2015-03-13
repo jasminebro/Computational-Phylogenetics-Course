@@ -16,7 +16,7 @@ G
 T
 """
 class ContinMarkov(object):
-    def __init__(self,v=0.6,statespace=None,freqlist=None,R=None,QMatrix=None,NumSimulations=None):
+    def __init__(self,v=0.6,statespace=None,freqlist=None,R=None,QMatrix=None,NormQMatrix=None,NumSimulations=None):
     
           if freqlist==None:
              freqlist=[]
@@ -29,8 +29,8 @@ class ContinMarkov(object):
            # R=[rAC,rAG,rAT,rCG,rCT,rGT]
           if QMatrix==None:
             self.QMatrix=[]
-          #if NormQMatrix==None:
-              #self.NormQMatrix=[]
+          if NormQMatrix==None:
+              self.NormQMatrix=self.normalize()
           if NumSimulations==None:
             self.NumSimulations=input("Please enter the number of simulations:")         
                     
@@ -68,7 +68,7 @@ class ContinMarkov(object):
                 return statespace[i]
         return None     
           
-    def normalize(self,R=[0.45,0.67,0.76,0.39,0.59,0.43],freqlist=[0.27,0.34,0.20,.19]):
+    def normalize(self,R=[0.45,0.67,0.76,0.39,0.59,0.43],freqlist=[0.27,0.34,0.20,.19],statespace=["a","t","c","g"]):
                 
         """I am creating a function to normalize my matrix before simulating transtions""" 
         import numpy as np 
@@ -91,76 +91,79 @@ class ContinMarkov(object):
         print "My weighted average of rates is:" ,waverage 
             #now I will use the array method of numpy so I can divide all the values of my matrix by the weighted average
         QArray=np.array(QMatrix)
-        NormQMatrix=QArray/waverage          
+        NormQMatrix=QArray/waverage 
+        #MargProbs=[NormQMatrix[0][1]/-NormQMatrix[0][0],NormQMatrix[0][2]/-NormQMatrix[0][0],NormQMatrix[0][3]/-NormQMatrix[0][0],
+                   #NormQMatrix[1][0]/-NormQMatrix[1][1],NormQMatrix[1][2]/-NormQMatrix[1][1],NormQMatrix[1][3]/-NormQMatrix[1][1],
+                   #NormQMatrix[2][0]/-NormQMatrix[2][2],NormQMatrix[2][1]/-NormQMatrix[2][2],NormQMatrix[2][3]/-NormQMatrix[2][2],
+                   #NormQMatrix[3][0]/-NormQMatrix[3][3],NormQMatrix[3][1]/-NormQMatrix[3][3],NormQMatrix[3][2]/-NormQMatrix[3][3]]
+
         return NormQMatrix
         
+        
 
-    def simulate(self,NormQMatrix):
+
+    def simulate(self,freqlist=[0.27,0.34,0.20,.19],statespace=["a","t","c","g"],v=0.06):
         import scipy
         import random
-        #create a list of the marginal probabilties associated with each nucleotide
-        MargProbs=[NormQMatrix[0][1]/-NormQMatrix[0][0],NormQMatrix[0][2]/-NormQMatrix[0][0],NormQMatrix[0][3]/-NormQMatrix[0][0],
-                   NormQMatrix[1][0]/-NormQMatrix[1][1],NormQMatrix[1][2]/-NormQMatrix[1][1],NormQMatrix[1][3]/-NormQMatrix[1][1],
-                   NormQMatrix[2][0]/-NormQMatrix[2][2],NormQMatrix[2][1]/-NormQMatrix[2][2],NormQMatrix[2][3]/-NormQMatrix[2][2],
-                   NormQMatrix[3][0]/-NormQMatrix[3][3],NormQMatrix[3][1]/-NormQMatrix[3][3],NormQMatrix[3][2]/-NormQMatrix[3][3]]
+        #create a list of the marginal probabilties associated with each nucleotides
         states=[] #this is a list to hold that states of the chain 
         waitTimes=[]
         # Draw a STARTING STATE from the equilibrium frequencies              
         randomNum = scipy.random.random()
-        if randomNum <= self.freqlist[0]: 
-            states.extend(self.statespace[0]) #should return state a
-        elif self.freqlist[0]< randomNum <=sum(self.freqlist[1]+self.freqlist[0]): 
-            states.extend(self.statespace[1]) #should return state c
-        elif self.freqlist[3]> randomNum >self.freqlist[1]:
-            states.extend( self.statespace[2]) #should return state g
+        if randomNum <= freqlist[0]: 
+            states.extend(statespace[0]) #should return state a
+        elif freqlist[0]< randomNum <=(freqlist[1]+freqlist[0]): 
+            states.extend(statespace[1]) #should return state c
+        elif freqlist[3]> randomNum >freqlist[1]:
+            states.extend(statespace[2]) #should return state g
         else:
-            states.extend(self.statespace[3]) #should return t
+            states.extend(statespace[3]) #should return t
         # Draw a waiting time from the appropriate exponential distribution.
-        while sum(waitTimes)<self.v:
+        while sum(waitTimes)<v:
             for i in states[-1]: #this will pull the last element of the states list
-              if states[-1] == self.statespace[0]: #we are in statespace a
-                  waitTime=random.expovariate(-self.NormQMatrix[0][0])
+              if states[-1] ==statespace[0]: #we are in statespace a
+                  waitTime=random.expovariate(self.NormQMatrix[0][0])
                   waitTimes.extend(waitTime)
                   # Draw a new state from the marginal probabilities associated with the current state.
                   newstate=self.discSamp(self.MargProbs[0]) #draw from row 1 of list
                   if newstate==self.NormQMatrix[0][1]/-self.NormQMatrix[0][0]:
-                      newstate=self.statespace[1]
+                      newstate=statespace[1]
                       states.extend(newstate)
-                  elif newstate==self.NormQMatrix[0][2]/-self.NormQMatrix[0][0]:
-                      newstate=self.statespace[2]
+                  elif newstate==self.NormQMatrix[0][2]/self.NormQMatrix[0][0]:
+                      newstate=statespace[2]
                       states.extend(newstate)
                   else:
-                      newstate=self.statespace[3]
+                      newstate=statespace[3]
                       states.extend(newstate)   
                       
-              elif states[-1] ==self.statespace[1]: #we are in statespace c
+              elif states[-1]==statespace[1]: #we are in statespace c
                   waitTime=random.expovariate(-self.NormQMatrix[1][1])
                   waitTimes.extend(waitTime)
                   # Draw a new state from the marginal probabilities associated with the current state.
                   newstate=self.discSamp(self.MargProbs[1]) #draw from row 2 of list 
                   if newstate==self.NormQMatrix[1][0]/-self.NormQMatrix[1][1]:
-                      newstate=self.statespace[0]
+                      newstate=statespace[0]
                       states.extend(newstate)
                   elif newstate==self.NormQMatrix[1][2]/-self.NormQMatrix[1][1]:
-                      newstate=self.statespace[2]
+                      newstate=statespace[2]
                       states.extend(newstate)
                   else:
-                      newstate=self.statespace[3]
+                      newstate=statespace[3]
                       states.extend(newstate)
                       
-              elif states[-1] == self.statespace[2]: #we are in statespace g
+              elif states[-1] == statespace[2]: #we are in statespace g
                   waitTime=random.expovariate(-self.NormQMatrix[2][2])
                   waitTimes.extend(waitTime)
                   # Draw a new state from the marginal probabilities associated with the current state.
                   newstate=self.discSamp(self.MargProbs[2])
                   if newstate==self.NormQMatrix[2][0]/-self.NormQMatrix[2][2]:
-                      newstate=self.statespace[0]
+                      newstate=statespace[0]
                       states.extend(newstate)
                   elif newstate==self.NormQMatrix[2][1]/-self.NormQMatrix[2][2]:
-                      newstate=self.statespace[1]
+                      newstate=statespace[1]
                       states.extend(newstate)
                   else:
-                      newstate=self.statespace[3]
+                      newstate=statespace[3]
                       states.extend(newstate)
                       
               else: #this will give us the wait time for "t"
@@ -169,17 +172,13 @@ class ContinMarkov(object):
                   # Draw a new state from the marginal probabilities associated with the current state.
                   newstate=self.discSamp(self.MargProbs[3])
                   if newstate ==self.NormQMatrix[3][0]/-self.NormQMatrix[3][3]:
-                      newstate=self.statespace[0]
+                      newstate=statespace[0]
                       states.extend(newstate)
                   elif newstate ==self.NormQMatrix[3][1]/-self.NormQMatrix[3][3]:
-                      newstate=self.statespace[1]
+                      newstate=statespace[1]
                       states.extend(newstate)
                   else:
                       newstate=self.statespace[2]
                       states.extend(newstate)
             return states
             return waitTimes 
-   
-
-
-
