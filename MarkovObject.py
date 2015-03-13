@@ -92,15 +92,13 @@ class ContinMarkov(object):
             #now I will use the array method of numpy so I can divide all the values of my matrix by the weighted average
         QArray=np.array(QMatrix)
         NormQMatrix=QArray/waverage 
-        #MargProbs=[NormQMatrix[0][1]/-NormQMatrix[0][0],NormQMatrix[0][2]/-NormQMatrix[0][0],NormQMatrix[0][3]/-NormQMatrix[0][0],
-                   #NormQMatrix[1][0]/-NormQMatrix[1][1],NormQMatrix[1][2]/-NormQMatrix[1][1],NormQMatrix[1][3]/-NormQMatrix[1][1],
-                   #NormQMatrix[2][0]/-NormQMatrix[2][2],NormQMatrix[2][1]/-NormQMatrix[2][2],NormQMatrix[2][3]/-NormQMatrix[2][2],
-                   #NormQMatrix[3][0]/-NormQMatrix[3][3],NormQMatrix[3][1]/-NormQMatrix[3][3],NormQMatrix[3][2]/-NormQMatrix[3][3]]
+        MargProbs=[NormQMatrix[0][1]/-NormQMatrix[0][0],NormQMatrix[0][2]/-NormQMatrix[0][0],NormQMatrix[0][3]/-NormQMatrix[0][0],
+                   NormQMatrix[1][0]/-NormQMatrix[1][1],NormQMatrix[1][2]/-NormQMatrix[1][1],NormQMatrix[1][3]/-NormQMatrix[1][1],
+                   NormQMatrix[2][0]/-NormQMatrix[2][2],NormQMatrix[2][1]/-NormQMatrix[2][2],NormQMatrix[2][3]/-NormQMatrix[2][2],
+                   NormQMatrix[3][0]/-NormQMatrix[3][3],NormQMatrix[3][1]/-NormQMatrix[3][3],NormQMatrix[3][2]/-NormQMatrix[3][3]]
 
-        return NormQMatrix
+        return NormQMatrix, MargProbs
         
-        
-
 
     def simulate(self,freqlist=[0.27,0.34,0.20,.19],statespace=["a","t","c","g"],v=0.06):
         import scipy
@@ -181,4 +179,4 @@ class ContinMarkov(object):
                       newstate=self.statespace[2]
                       states.extend(newstate)
             return states
-            return waitTimes 
+            return waitTimes
