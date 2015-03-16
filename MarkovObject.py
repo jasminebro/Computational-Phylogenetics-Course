@@ -19,7 +19,7 @@ import scipy
 import random
 import numpy as np
 class ContinMarkov(object):
-    def __init__(self,v=12,MargProbs=None,statespace=["a","t","c","g"],freqlist=[0.27,0.34,0.20,0.19],R=[0.45,0.67,0.76,0.39,0.59,0.43],QMatrix=None,NormQMatrix=None,NumSimulations=1):
+    def __init__(self,v=0.2,MargProbs=None,statespace=["a","t","c","g"],freqlist=[0.27,0.34,0.20,0.19],R=[0.45,0.67,0.76,0.39,0.59,0.43],QMatrix=None,NormQMatrix=None,NumSimulations=1):
         self.v=v #branch length
         self.statespace=statespace #my state space of possible states
         self.NumSimulations=NumSimulations #number of simulations I will do
@@ -67,9 +67,10 @@ class ContinMarkov(object):
          [self.R[1]*self.freqlist[0],self.R[3]*self.freqlist[1],-1*(self.R[1]*self.freqlist[0]+self.R[3]*self.freqlist[1]+self.R[5]*self.freqlist[3]),self.R[5]*self.freqlist[3]],
          [self.R[2]*self.freqlist[0],self.R[4]*self.freqlist[1],self.R[5]*self.freqlist[2],-1*(self.R[2]*self.freqlist[0]+self.R[4]*self.freqlist[1]+self.R[5]*self.freqlist[2])]]
         #this is my lists of lists that contains my q matrix values
-        #for l in self.QMatrix:
+        print "The QMatrix that will be normalized is below. The normlized matrix is returned from this method"
+        for l in self.QMatrix:
             #map(a function,a sequence)---applies your function over the entire sequence
-            #print ', '.join(map(str, l))
+            print ', '.join(map(str, l))
             #my Qmatrix will be displayed in a "matrix" like format(each row on it's own line)
             #now I need to calculate the weighted average of rates equation
         waverage=(self.freqlist[0]*-self.QMatrix[0][0])+(self.freqlist[1]*-self.QMatrix[1][1])+(self.freqlist[2]*-self.QMatrix[2][2])+(self.freqlist[3]*-self.QMatrix[3][3])
@@ -99,65 +100,70 @@ class ContinMarkov(object):
         else:
             self.states.extend(self.statespace[3]) #should return t
         # Draw a waiting time from the appropriate exponential distribution.
-        while sum(self.WaitTimes)<self.v:
-            for i in self.states[-1]: #this will pull the last element of the states list
-              if self.states[-1] ==self.statespace[0]: #we are in self.statespace a
-                  waitTime=random.expovariate(self.NormQMatrix[0][0])
-                  self.WaitTimes.extend([waitTime])
-                  # Draw a new state from the marginal probabilities associated with the current state.
-                  newstate=self.discSamp(self.MargProbs[0],self.statespace) #draw from row 1 of list
-                  if newstate==self.NormQMatrix[0][1]/-self.NormQMatrix[0][0]:
-                      newstate=self.statespace[1]
-                      self.states.extend(newstate)
-                  elif newstate==self.NormQMatrix[0][2]/self.NormQMatrix[0][0]:
-                      newstate=self.statespace[2]
-                      self.states.extend(newstate)
-                  else:
-                      newstate=self.statespace[3]
-                      self.states.extend(newstate)
-
-              elif self.states[-1]==self.statespace[1]: #we are in statespace c
-                  waitTime=random.expovariate(-self.NormQMatrix[1][1])
-                  self.WaitTimes.extend([waitTime])
-                  # Draw a new state from the marginal probabilities associated with the current state.
-                  newstate=self.discSamp(self.MargProbs[1],self.statespace) #draw from row 2 of list
-                  if newstate==self.NormQMatrix[1][0]/-self.NormQMatrix[1][1]:
-                      newstate=self.statespace[0]
-                      self.states.extend(newstate)
-                  elif newstate==self.NormQMatrix[1][2]/-self.NormQMatrix[1][1]:
-                      newstate=self.statespace[2]
-                      self.states.extend(newstate)
-                  else:
-                      newstate=self.statespace[3]
-                      self.states.extend(newstate)
-
-              elif self.states[-1] == self.statespace[2]: #we are in statespace g
-                  waitTime=random.expovariate(-self.NormQMatrix[2][2])
-                  self.WaitTimes.extend([waitTime])
-                  # Draw a new state from the marginal probabilities associated with the current state.
-                  newstate=self.discSamp(self.MargProbs[2],self.statespace)
-                  if newstate==self.NormQMatrix[2][0]/-self.NormQMatrix[2][2]:
-                      newstate=self.statespace[0]
-                      self.states.extend(newstate)
-                  elif newstate==self.NormQMatrix[2][1]/-self.NormQMatrix[2][2]:
-                      newstate=self.statespace[1]
-                      self.states.extend(newstate)
-                  else:
-                      newstate=self.statespace[3]
-                      self.states.extend(newstate)
-
-              else: #this will give us the wait time for "t"
-                  waitTime=random.expovariate(-self.NormQMatrix[3][3])
-                  self.WaitTimes.extend([waitTime])
-                  # Draw a new state from the marginal probabilities associated with the current state.
-                  newstate=self.discSamp(self.MargProbs[3],self.statespace)
-                  if newstate ==self.NormQMatrix[3][0]/-self.NormQMatrix[3][3]:
-                      newstate=self.statespace[0]
-                      self.states.extend(newstate)
-                  elif newstate ==self.NormQMatrix[3][1]/-self.NormQMatrix[3][3]:
-                      newstate=self.statespace[1]
-                      self.states.extend(newstate)
-                  else:
-                      newstate=self.statespace[2]
-                      self.states.extend(newstate)
+        
+        
+        for i in self.states[-1]: #this will pull the last element of the states list
+            while sum(self.WaitTimes)<self.v:
+                if self.states[-1] ==self.statespace[0]: #we are in self.statespace a
+                    waitTime1=random.expovariate(self.NormQMatrix[0][0])*-1
+                    self.WaitTimes.extend([waitTime1])
+                      # Draw a new state from the marginal probabilities associated with the current state.
+                    newstate=self.discSamp(self.MargProbs[0],self.statespace) #draw from row 1 of list
+        
+                    if newstate==self.NormQMatrix[0][1]/-self.NormQMatrix[0][0]:
+                        newstate=self.statespace[1]
+                        self.states.extend(newstate)
+                    elif newstate==self.NormQMatrix[0][2]/self.NormQMatrix[0][0]:
+                        newstate=self.statespace[2]
+                        self.states.extend(newstate)
+                    else:
+                        newstate=self.statespace[3]
+                        self.states.extend(newstate)
+                      
+        
+                if self.states[-1]==self.statespace[1]: #we are in statespace c
+                      waitTime2=random.expovariate(self.NormQMatrix[1][1])*-1
+                      self.WaitTimes.extend([waitTime2])
+                      # Draw a new state from the marginal probabilities associated with the current state.
+                      newstate=self.discSamp(self.MargProbs[1],self.statespace) #draw from row 2 of list
+                      if newstate==self.NormQMatrix[1][0]/-self.NormQMatrix[1][1]:
+                          newstate=self.statespace[0]
+                          self.states.extend(newstate)
+                      elif newstate==self.NormQMatrix[1][2]/-self.NormQMatrix[1][1]:
+                          newstate=self.statespace[2]
+                          self.states.extend(newstate)
+                      else:
+                          newstate=self.statespace[3]
+                          self.states.extend(newstate)
+                          
+    
+                if self.states[-1] == self.statespace[2]: #we are in statespace g
+                      waitTime3=random.expovariate(self.NormQMatrix[2][2])*-1
+                      self.WaitTimes.extend([waitTime3])
+                      # Draw a new state from the marginal probabilities associated with the current state.
+                      newstate=self.discSamp(self.MargProbs[2],self.statespace)
+                      if newstate==self.NormQMatrix[2][0]/-self.NormQMatrix[2][2]:
+                          newstate=self.statespace[0]
+                          self.states.extend(newstate)
+                      elif newstate==self.NormQMatrix[2][1]/-self.NormQMatrix[2][2]:
+                          newstate=self.statespace[1]
+                          self.states.extend(newstate)
+                      else:
+                          newstate=self.statespace[3]
+                          self.states.extend(newstate)
+    
+                if self.states[-1] ==self.statespace[3]: #this will give us the wait time for "t"
+                      waitTime4=random.expovariate(self.NormQMatrix[3][3])*-1
+                      self.WaitTimes.extend([waitTime4])
+                      # Draw a new state from the marginal probabilities associated with the current state.
+                      newstate=self.discSamp(self.MargProbs[3],self.statespace)
+                      if newstate ==self.NormQMatrix[3][0]/-self.NormQMatrix[3][3]:
+                          newstate=self.statespace[0]
+                          self.states.extend(newstate)
+                      elif newstate ==self.NormQMatrix[3][1]/-self.NormQMatrix[3][3]:
+                          newstate=self.statespace[1]
+                          self.states.extend(newstate)
+                      else:
+                          newstate=self.statespace[2]
+                          self.states.extend(newstate)
             return (self.states , self.WaitTimes)
