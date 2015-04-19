@@ -83,12 +83,12 @@ class ContinMarkov(object):
     def MarginalProbs(self):
         #(v)=e^Qv
         #import scipy
-        #ProbM=scipy.linalg.expm(NormQMatrix*self.v)
+        self.MargProbs=scipy.linalg.expm(NormQMatrix*self.v)
 
-         self.MargProbs=[self.NormQMatrix[0][1]/-self.NormQMatrix[0][0],self.NormQMatrix[0][2]/-self.NormQMatrix[0][0],self.NormQMatrix[0][3]/-self.NormQMatrix[0][0],
-                   self.NormQMatrix[1][0]/-self.NormQMatrix[1][1],self.NormQMatrix[1][2]/-self.NormQMatrix[1][1],self.NormQMatrix[1][3]/-self.NormQMatrix[1][1],
-                   self.NormQMatrix[2][0]/-self.NormQMatrix[2][2],self.NormQMatrix[2][1]/-self.NormQMatrix[2][2],self.NormQMatrix[2][3]/-self.NormQMatrix[2][2],
-                   self.NormQMatrix[3][0]/-self.NormQMatrix[3][3],self.NormQMatrix[3][1]/-self.NormQMatrix[3][3],self.NormQMatrix[3][2]/-self.NormQMatrix[3][3]]
+         #self.MargProbs=[self.NormQMatrix[0][1]/-self.NormQMatrix[0][0],self.NormQMatrix[0][2]/-self.NormQMatrix[0][0],self.NormQMatrix[0][3]/-self.NormQMatrix[0][0],
+                   #self.NormQMatrix[1][0]/-self.NormQMatrix[1][1],self.NormQMatrix[1][2]/-self.NormQMatrix[1][1],self.NormQMatrix[1][3]/-self.NormQMatrix[1][1],
+                   #self.NormQMatrix[2][0]/-self.NormQMatrix[2][2],self.NormQMatrix[2][1]/-self.NormQMatrix[2][2],self.NormQMatrix[2][3]/-self.NormQMatrix[2][2],
+                   #self.NormQMatrix[3][0]/-self.NormQMatrix[3][3],self.NormQMatrix[3][1]/-self.NormQMatrix[3][3],self.NormQMatrix[3][2]/-self.NormQMatrix[3][3]]
          return self.MargProbs
     def simulate(self):
        
