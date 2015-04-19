@@ -205,20 +205,20 @@ class ContinMarkov(object):
             
                 while self.diff>self.thresh :
                     likeCurr=self.MargProbs
-                    vUp=self.currBrl+diff
-                    vDown=currBrl-diff
+                    vUp=self.currBrl+self.diff
+                    vDown=self.currBrl-self.diff
                     if (vDown < 0):
                         vDown = 0
                     likeUp=self.MargProbs
                     likeDown=self.MargProbs
                     if likeDown>likeCurr :
                         self.currBrl=vDown
-                        vUp=self.currBrl+diff
-                        vDown=self.currBrl-diff
+                        vUp=self.currBrl+self.diff
+                        vDown=self.currBrl-self.diff
                     elif likeUp>likeCurr :
-                        currBrl=vUp
-                        vUp=currBrl+diff
-                        vDown=currBrl-diff
+                        self.currBrl=vUp
+                        vUp=self.currBrl+self.diff
+                        vDown=self.currBrl-self.diff
                     else :
                         self.diff *= 0.5           
                 return vCurr  
