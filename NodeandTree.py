@@ -16,6 +16,8 @@ to link nodes to form a tree. Use this as a springboard to start thinking about:
 (e.g., ((spA,spB),spC)) if the only argument passed to the function is a
 root node? This will require recursion.
 """
+
+from ContinMarkov import ContinMarkov
 # ---> Defining Node and Tree classes <---
 class Node:
     def __init__(self,name="",parent=None,children=None):
@@ -126,14 +128,43 @@ class Tree:
     def treeLength(self,node):
         """
         A method to calculate and return total tree length.
+        TTL is total tree length
         """
-        # Write a recursive function that takes the root node as one of its arguments
-        # and prints out a parenthetical (Newick) tree string. Due next Tues (3/17).
+        self.TTL=0 #initial tree length
+        if len(node.children) > 0: # See if my nodes have children
+            self.TTL += node.brl
+        for child in node.children: 
+            self.treeLength(child) # Check the tree length again and repeat
+        else:        
+           self.TTL += node.brl
+    
+        return self.TTL
+        
     def newick(self,node):
         """
         A method of a Tree object that will print out the Tree as a
-        parenthetical string (Newick format).
+        parenthetical string (Newick format).#adapted from Oscars code
         """
+        newickString = "(" # the start of the string
+        
+        if len(node.children) == 0: # Is the node terminal/at the tip
+            return node.name + ":" + str(node.brl)# returns name 
+            
+        else:
+            for child in node.children: 
+                newickString += self.newick(child) # runs the function for all the children
+                if node.children[-1] == child: # is the previous node a child
+                    pass 
+                else:
+                    newickString += "," # adds a comma to separate sister clades
+            if node.brl == 0: # checks if the node is the root
+                newickString += ")" 
+            else:
+                newickString += ")"+ ":" + str(node.brl) # otherwise, adds the brl for the ancestor
+            
+        return newickString.replace(",(","(") # removes the errant comma before non-sister clades
+
+
         # Now, let's write a recursive function to simulate sequence evolution along a
         # tree. This amounts to simply simulating evolution along each branch
         # from the root towards the tips. We'll need to use our ctmc class for setting the
@@ -148,14 +179,33 @@ class Tree:
         """
         This method of a Tree object defines a ctmc object associated with all
         nodes that have a branch length (i.e., all but the root).
+    
         """
+        #The contin Markov Chain simulator is imported above so it can be called
+        #Not sure if I should have reposted the code here since it's posted in the previous exercise 
     def simulate(self,node):
         """
         This method simulates evolution along the branches of a tree, taking
-        the root node as its initial argument.
+        the root node as its initial argument. #adapted from Subir Code
         """
+        
+        if node.children == []:
+			pass
+        else:
+		for child in node.children:
+			child.sequence = [ContinMarkov.ContMarkov(time = child.brl).simulate(seq=node.sequence)]
+			self.simulate(child)
+		
     def printSeqs(self,node):
         """
         This method prints out the names of the tips and their associated
         sequences as an alignment (matrix).
         """
+        if len(node.children)> 0:
+            print node.name, node.sequence
+        elif child in node.children:
+            self.printSeqs(child)
+        else: 
+            self.alignMatrix.append(node.name)
+            self.alignMatrix.append(node.seq)
+        return self.alignmentMatrix
