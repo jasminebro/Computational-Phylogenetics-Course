@@ -183,3 +183,43 @@ class ContinMarkov(object):
                                                            
                     return (self.states , self.WaitTimes)
             
+       def IndivStates(self):
+            from itertools import zip
+
+            for i in zip(self.states):#list must be same list of zip will take length of shorter list
+                self.Chains=i
+            return self.Chains
+
+            from structshape import structshape
+
+            return structshape(self.Chains) #this should tell me how many bases I have per row and how many rows
+            """
+             Now I am creating a function that will determine the probability of sites between
+            n number of sites. You are comparing the individual sites of the chains/sequences
+            created during the continuous markov chain simulation
+            # Calculate the starting likelihood for currBrl. Multiply likelihoods from
+            # different sites.
+            """
+
+        def estBrl (self,currBrl=self.v, diff=0.1, thresh=0.0001): 
+            
+                while self.diff>self.thresh :
+                    """CHANGE THE ABOVE TO BE AN ARGUMENT"""
+                    likeCurr=self.MargProbs
+                    vUp=currBrl+diff
+                    vDown=currBrl-diff
+                    if (vDown < 0):
+                        vDown = 0
+                    likeUp=self.MargProbs
+                    likeDown=self.MargProbs
+                    if likeDown>likeCurr :
+                        currBrl=vDown
+                        vUp=currBrl+diff
+                        vDown=currBrl-diff
+                    elif likeUp>likeCurr :
+                        vCurr=vUp
+                        vUp=currBrl+diff
+                        vDown=currBrl-diff
+                    else :
+                        self.diff *= 0.5           
+                return vCurr  
