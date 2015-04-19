@@ -204,20 +204,19 @@ class ContinMarkov(object):
         def estBrl (self,currBrl=self.v, diff=0.1, thresh=0.0001): 
             
                 while self.diff>self.thresh :
-                    """CHANGE THE ABOVE TO BE AN ARGUMENT"""
                     likeCurr=self.MargProbs
-                    vUp=currBrl+diff
+                    vUp=self.currBrl+diff
                     vDown=currBrl-diff
                     if (vDown < 0):
                         vDown = 0
                     likeUp=self.MargProbs
                     likeDown=self.MargProbs
                     if likeDown>likeCurr :
-                        currBrl=vDown
-                        vUp=currBrl+diff
-                        vDown=currBrl-diff
+                        self.currBrl=vDown
+                        vUp=self.currBrl+diff
+                        vDown=self.currBrl-diff
                     elif likeUp>likeCurr :
-                        vCurr=vUp
+                        currBrl=vUp
                         vUp=currBrl+diff
                         vDown=currBrl-diff
                     else :
